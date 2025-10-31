@@ -1,64 +1,127 @@
-# PromptsApp
+# promptsapp
 
-A simple Node.js library that repeatedly prompts the user for input until a specific command is entered.
+A lightweight Node.js command-line prompt helper that simplifies building interactive console applications.  
+It allows you to define custom commands, handle user input dynamically, and specify an exit command — all with minimal setup.
 
-## Installation
+---
 
-1. Ensure you have Node.js installed.
-2. Save the `promptsapp.js` file in your project directory.
-3. Install dependencies (none required for this library as it uses the built-in `readline` module).
+## ✨ Features
 
-## Usage
+- Simple and lightweight (no external dependencies)
+- Works directly with Node.js’ built-in `readline` module
+- Supports custom commands with arguments
+- Easily configurable exit command and callback
+- Ideal for CLI tools, chatbots, or REPL-style interfaces
 
-The `PromptsApp` class allows you to prompt the user for input until they enter a specified target command. Here's an example of how to use it:
+---
 
-### Example
+## 📦 Installation
 
-```javascript
-const PromptsApp = require('./promptsapp');
-
-async function main() {
-    // Create an instance with the target command "exit"
-    const app = PromptsApp.app('exit');
-    
-    // Start prompting with a custom message
-    await app.start('app> ');
-    
-    console.log('Target command received, application stopped.');
-}
-
-main();
+```bash
+npm install promptsapp
 ```
 
-In this example:
-- The user is prompted with `app> ` until they type `exit`.
-- Once `exit` is entered, the prompt stops, and the program continues.
+Or include it directly in your project:
 
-## API
+```bash
+# If you cloned this repository
+npm install
+```
 
-### `new PromptsApp(targetCommand)`
+---
 
-Creates a new instance of the PromptsApp class.
+## 🚀 Usage Example
 
-- **targetCommand** (`string`): The command that, when entered, stops the prompting.
+Here’s a quick example showing how to use `promptsapp`:
 
-### `start(message)`
+```js
+const { app } = require('promptsapp');
 
-Starts prompting the user until the target command is entered.
+const work = async (command, args) => {
+  if (command === 'say') {
+    console.log('You said:', args.join(' '));
+  } else {
+    console.log('Unknown command:', command);
+  }
+};
 
-- **message** (`string`, optional): The prompt message displayed to the user. Defaults to `'Enter command: '`.
-- Returns a `Promise` that resolves with the target command when entered.
+const prompt = app('Enter command (type "exit" to quit): ', 'exit', work);
 
-### `stop()`
+prompt.onExit(() => {
+  console.log('Goodbye!');
+});
 
-Manually stops the prompt and closes the readline interface.
+prompt.start();
+```
 
-## Notes
+**Output Example:**
+```
+Enter command (type "exit" to quit): say hello world
+You said: hello world
+Enter command (type "exit" to quit): test
+Unknown command: test
+Enter command (type "exit" to quit): exit
+Goodbye!
+```
 
-- The comparison of the input with the target command is case-insensitive.
-- Leading and trailing whitespace in the user input is trimmed.
-- The library uses the built-in Node.js `readline` module, so no external dependencies are required.
+---
 
-## License
+## 🧩 API Reference
 
-MIT License
+### `app(message, targetCommand, work)`
+
+Creates a new prompt application instance.
+
+| Parameter | Type | Description |
+|------------|------|-------------|
+| `message` | `string` | Message displayed for user input |
+| `targetCommand` | `string` | Command that triggers program exit |
+| `work` | `function(command, args)` | Async function that handles each command |
+
+**Returns:** `promptsapp` instance.
+
+---
+
+### `promptsapp.start()`
+
+Starts the interactive prompt loop.  
+Returns a Promise that resolves when the exit command is entered.
+
+---
+
+### `promptsapp.stop()`
+
+Stops the readline interface manually.
+
+---
+
+### `promptsapp.onExit(callback)`
+
+Registers a callback that runs when the exit command is triggered.
+
+---
+
+## 🧠 Example Use Cases
+
+- Build your own mini shell or REPL tool  
+- Create chat-like terminal interfaces  
+- Quickly prototype CLI apps
+
+---
+
+## 🧾 License
+
+MIT License © 2025 [Your Name]
+
+---
+
+## 💬 Contributing
+
+Contributions, issues, and feature requests are welcome!  
+Feel free to open an issue or submit a pull request on [GitHub](https://github.com/yourusername/promptsapp).
+
+---
+
+## ⭐ Acknowledgements
+
+Built with ❤️ using Node.js.

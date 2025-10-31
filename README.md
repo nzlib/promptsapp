@@ -19,7 +19,7 @@ const PromptsApp = require('./promptsapp');
 
 async function main() {
     // Create an instance with the target command "exit"
-    const app = new PromptsApp('exit');
+    const app = PromptsApp.app('exit');
     
     // Start prompting with a custom message
     await app.start('app> ');
